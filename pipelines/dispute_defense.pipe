@@ -1,0 +1,94 @@
+{
+  "project_id": "b6edaf8c-21d4-41c1-b7dd-a751ceeb129d",
+  "components": [
+    {
+      "id": "webhook_1",
+      "provider": "webhook",
+      "name": "Webhook",
+      "config": {
+        "hideForm": true,
+        "mode": "Source",
+        "parameters": {},
+        "type": "webhook",
+        "name": "Webhook"
+      },
+      "ui": {
+        "position": {
+          "x": 140,
+          "y": 330
+        },
+        "measured": {
+          "width": 150,
+          "height": 144
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      }
+    },
+    {
+      "id": "llm_gemini_1",
+      "provider": "llm_gemini",
+      "name": "Gemini",
+      "config": {
+        "profile": "gemini-3_1-pro-preview",
+        "1-pro-preview": {
+          "apikey": "${GEMINI_API_KEY}"
+        },
+        "name": "Gemini"
+      },
+      "ui": {
+        "position": {
+          "x": 450,
+          "y": 370
+        },
+        "measured": {
+          "width": 150,
+          "height": 58
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "questions",
+          "from": "webhook_1"
+        }
+      ]
+    },
+    {
+      "id": "response_answers_1",
+      "provider": "response_answers",
+      "name": "Return Answers",
+      "config": {
+        "laneName": "answers",
+        "name": "Return Answers"
+      },
+      "ui": {
+        "position": {
+          "x": 640,
+          "y": 370
+        },
+        "measured": {
+          "width": 150,
+          "height": 58
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "answers",
+          "from": "llm_gemini_1"
+        }
+      ]
+    }
+  ],
+  "version": 1,
+  "docRevision": 16,
+  "isLocked": false,
+  "snapToGrid": true,
+  "snapGridSize": [
+    10,
+    10
+  ]
+}
