@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from './components/Header';
 import StatsOverview from './components/StatsOverview';
 import DisputeTable from './components/DisputeTable';
@@ -7,6 +7,7 @@ import BatchUploadModal from './components/BatchUploadModal';
 import ProfileSettingsModal from './components/ProfileSettingsModal';
 import SplashScreen from './components/SplashScreen';
 import Auth from './pages/Auth';
+import AiBriefingCard from './components/AiBriefingCard';
 import { CheckCircle, AlertCircle, Info, Sparkles } from 'lucide-react';
 
 export default function App() {
@@ -38,6 +39,8 @@ export default function App() {
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [isIngesting, setIsIngesting] = useState(false);
   const [toast, setToast] = useState(null);
+  // Show the AI Briefing popup once each time user logs in
+  const [showBriefing, setShowBriefing] = useState(true);
 
   const showToast = (message, type = 'info') => {
     setToast({ message, type });
@@ -114,12 +117,15 @@ export default function App() {
     localStorage.setItem('cg_user', JSON.stringify(userData));
     localStorage.setItem('cg_auth_token', authToken);
     showToast(`Welcome ${userData.name}! Store onboarding complete.`, 'success');
+    // Always show the AI Briefing popup on every login / signup / instant demo
+    setShowBriefing(true);
   };
 
   // Handle Merchant Logout
   const handleLogout = () => {
     setUser(null);
     setToken(null);
+    setShowBriefing(false); // reset so it re-fires cleanly on next login
     localStorage.removeItem('cg_user');
     localStorage.removeItem('cg_auth_token');
     showToast('Logged out of merchant portal', 'info');
@@ -262,6 +268,8 @@ export default function App() {
       if (data.success) {
         showToast(`🚨 New $520 Dispute Received & Auto-Defended by Gemini!`, 'success');
         fetchDisputes();
+        // Re-open the AI Briefing popup so merchant sees updated pending count
+        setShowBriefing(true);
       } else {
         showToast(`Webhook Error: ${data.error}`, 'error');
       }
@@ -329,13 +337,31 @@ export default function App() {
       <main style={{ flex: 1 }}>
         <StatsOverview disputes={disputes} />
 
-        <DisputeTable
-          disputes={disputes}
-          onSelectDispute={(d) => setSelectedDispute(d)}
-          onTriggerDefend={handleTriggerDefend}
-          loadingId={loadingId}
-        />
+        <div id="dispute-table-section">
+          <DisputeTable
+            disputes={disputes}
+            onSelectDispute={(d) => setSelectedDispute(d)}
+            onTriggerDefend={handleTriggerDefend}
+            loadingId={loadingId}
+          />
+        </div>
       </main>
+
+      {/* AI Copilot Briefing Popup — fixed overlay, shown once on login */}
+      {showBriefing && (
+        <AiBriefingCard
+          merchantName={user?.storeName || user?.email?.split('@')[0] || 'Alex'}
+          disputes={disputes}
+          onClose={() => setShowBriefing(false)}
+          onJumpToQueue={() => {
+            setShowBriefing(false);
+            setTimeout(() => {
+              const tableEl = document.getElementById('dispute-table-section');
+              if (tableEl) tableEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 370);
+          }}
+        />
+      )}
 
       {/* Side-by-Side Review Modal */}
       {selectedDispute && (
