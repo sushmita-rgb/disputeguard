@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Upload, FileCode, CheckCircle, AlertCircle } from 'lucide-react';
+import { X, Upload, FileCode, AlertCircle } from 'lucide-react';
 
 export default function BatchUploadModal({ onClose, onBatchSubmit, isIngesting }) {
   const sampleBatchJson = JSON.stringify({
@@ -68,31 +68,31 @@ export default function BatchUploadModal({ onClose, onBatchSubmit, isIngesting }
         
         {/* Modal Header */}
         <div style={{
-          padding: '20px 24px',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          padding: '18px 24px',
+          borderBottom: '1px solid #334155',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: 'rgba(15, 23, 42, 0.9)'
+          background: '#1E293B'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{
               width: '38px',
               height: '38px',
               borderRadius: '10px',
-              background: 'rgba(99, 102, 241, 0.15)',
+              background: 'rgba(59, 130, 246, 0.15)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '1px solid rgba(99, 102, 241, 0.3)'
+              border: '1px solid rgba(59, 130, 246, 0.3)'
             }}>
-              <Upload size={20} color="#818cf8" />
+              <Upload size={18} color="#60A5FA" />
             </div>
             <div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#F8FAFC', margin: 0 }}>
                 Batch Multi-Case Ingestion
               </h3>
-              <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+              <p style={{ fontSize: '0.78rem', color: '#94A3B8', margin: '2px 0 0 0' }}>
                 Demonstrate automated processing by importing multiple chargeback case JSONs
               </p>
             </div>
@@ -101,15 +101,15 @@ export default function BatchUploadModal({ onClose, onBatchSubmit, isIngesting }
           <button
             onClick={onClose}
             style={{
-              background: 'rgba(255, 255, 255, 0.06)',
-              border: 'none',
+              background: '#0F172A',
+              border: '1px solid #334155',
               borderRadius: '8px',
               width: '32px',
               height: '32px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'var(--text-muted)',
+              color: '#94A3B8',
               cursor: 'pointer'
             }}
           >
@@ -118,14 +118,14 @@ export default function BatchUploadModal({ onClose, onBatchSubmit, isIngesting }
         </div>
 
         {/* Modal Content */}
-        <div style={{ padding: '24px' }}>
+        <div style={{ padding: '24px', background: '#0F172A' }}>
           {errorMsg && (
             <div style={{
               background: 'rgba(244, 63, 94, 0.15)',
               border: '1px solid rgba(244, 63, 94, 0.3)',
               borderRadius: '8px',
               padding: '12px 16px',
-              color: '#fb7185',
+              color: '#FB7185',
               fontSize: '0.825rem',
               marginBottom: '16px',
               display: 'flex',
@@ -138,15 +138,15 @@ export default function BatchUploadModal({ onClose, onBatchSubmit, isIngesting }
           )}
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <FileCode size={16} /> Ingestion Payload (JSON Format)
+            <label style={{ fontSize: '0.825rem', fontWeight: 600, color: '#94A3B8', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <FileCode size={16} color="#60A5FA" /> Ingestion Payload (JSON Format)
             </label>
             <button
               onClick={() => setJsonText(sampleBatchJson)}
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: 'var(--accent-cyan)',
+                color: '#38BDF8',
                 fontSize: '0.75rem',
                 cursor: 'pointer',
                 fontWeight: 600
@@ -162,11 +162,11 @@ export default function BatchUploadModal({ onClose, onBatchSubmit, isIngesting }
             style={{
               width: '100%',
               height: '260px',
-              background: 'rgba(15, 23, 42, 0.8)',
-              border: '1px solid var(--border-card)',
-              borderRadius: '12px',
+              background: '#1E293B',
+              border: '1px solid #334155',
+              borderRadius: '10px',
               padding: '14px',
-              color: '#38bdf8',
+              color: '#38BDF8',
               fontFamily: 'var(--font-mono)',
               fontSize: '0.8rem',
               outline: 'none',
@@ -177,18 +177,18 @@ export default function BatchUploadModal({ onClose, onBatchSubmit, isIngesting }
 
         {/* Modal Footer */}
         <div style={{
-          padding: '16px 24px',
-          borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-          background: 'rgba(15, 23, 42, 0.95)',
+          padding: '14px 24px',
+          borderTop: '1px solid #334155',
+          background: '#1E293B',
           display: 'flex',
           justifyContent: 'flex-end',
-          gap: '12px'
+          gap: '10px'
         }}>
           <button onClick={onClose} className="btn btn-secondary">
             Cancel
           </button>
           <button onClick={handleSubmit} className="btn btn-primary" disabled={isIngesting}>
-            <Upload size={16} />
+            <Upload size={15} />
             {isIngesting ? 'Ingesting...' : 'Ingest & Process Batch'}
           </button>
         </div>

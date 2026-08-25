@@ -8,6 +8,7 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 dotenv.config();
 
 const { router: disputesRouter, memoryStore } = require('./routes/disputes');
+const { router: authRouter } = require('./routes/auth');
 const { seedDisputes } = require('./seed');
 const { generateDefensePackage } = require('./services/geminiDefenseService');
 
@@ -26,14 +27,16 @@ app.use(express.json({ limit: '10mb' }));
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
-    service: 'ChargeGuard AI Server',
+    service: 'Defendr AI Server',
     timestamp: new Date().toISOString(),
-    geminiConfigured: !!(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_api_key_here'),
-    rocketrideConfigured: !!process.env.ROCKETRIDE_URI
+    rocketrideUri: process.env.ROCKETRIDE_URI || 'https://staging.rocketride.ai',
+    geminiConfigured: !!(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY !== 'your_gemini_api_key_here' && process.env.GEMINI_API_KEY !== 'YOUR_GEMINI_API_KEY'),
+    rocketrideConfigured: !!(process.env.ROCKETRIDE_URI && process.env.ROCKETRIDE_APIKEY && process.env.ROCKETRIDE_APIKEY !== 'YOUR_ROCKETRIDE_STAGING_KEY')
   });
 });
 
 // Routes
+app.use('/api/auth', authRouter);
 app.use('/api/disputes', disputesRouter);
 
 // Global Error Handler
@@ -69,7 +72,7 @@ async function startServer() {
 
   app.listen(PORT, () => {
     console.log(`======================================================`);
-    console.log(`  ChargeGuard AI Backend listening on port ${PORT}`);
+    console.log(`  Defendr AI Backend listening on port ${PORT}`);
     console.log(`  Health check: http://localhost:${PORT}/api/health`);
     console.log(`  Disputes API: http://localhost:${PORT}/api/disputes`);
     console.log(`======================================================`);

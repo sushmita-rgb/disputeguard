@@ -31,14 +31,16 @@ class RocketRideService {
    * Run dispute through RocketRide pipeline
    */
   async processDisputePipeline(dispute) {
+    const targetHost = process.env.ROCKETRIDE_URI || 'https://staging.rocketride.ai';
     const pipelineName = this.pipelineConfig?.project_id || this.pipelineConfig?.name || 'chargeguard_dispute_defense';
-    console.log(`Executing RocketRide pipeline [${pipelineName}] for Dispute ID: ${dispute.disputeId}`);
+    console.log(`Executing RocketRide pipeline [${pipelineName}] via ${targetHost} for Dispute ID: ${dispute.disputeId}`);
 
     // Execute transformation & Gemini LLM node
     const defenseResult = await generateDefensePackage(dispute);
 
     return {
       pipelineId: pipelineName,
+      targetHost,
       executedAt: new Date().toISOString(),
       componentsProcessed: this.pipelineConfig?.components?.map(c => c.name) || ['Webhook', 'Gemini', 'Return Answers'],
       result: defenseResult

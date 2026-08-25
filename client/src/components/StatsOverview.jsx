@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldAlert, DollarSign, Award, Clock } from 'lucide-react';
+import { ShieldAlert, DollarSign, Award, Clock, ArrowUpRight } from 'lucide-react';
 
 export default function StatsOverview({ disputes = [] }) {
   const totalCount = disputes.length;
@@ -15,51 +15,55 @@ export default function StatsOverview({ disputes = [] }) {
   const stats = [
     {
       title: 'Total Disputed Volume',
-      value: `${totalCount} Cases`,
-      sub: `$${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })} Total At-Risk`,
+      value: `$${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`,
+      sub: `${totalCount} Active Cases At-Risk`,
       icon: ShieldAlert,
-      color: '#6366f1',
-      bg: 'rgba(99, 102, 241, 0.12)'
+      color: '#3B82F6',
+      bg: 'rgba(59, 130, 246, 0.12)',
+      border: 'rgba(59, 130, 246, 0.25)'
     },
     {
-      title: 'Pending Human Approval',
+      title: 'Pending Review Action',
       value: `${pendingCount} Cases`,
-      sub: 'Action required in side-by-side modal',
+      sub: 'Action required before bank deadline',
       icon: Clock,
-      color: '#f59e0b',
-      bg: 'rgba(245, 158, 11, 0.12)'
+      color: '#F59E0B',
+      bg: 'rgba(245, 158, 11, 0.12)',
+      border: 'rgba(245, 158, 11, 0.25)'
     },
     {
-      title: 'Representment Win Rate Est.',
+      title: 'Avg. Win Probability',
       value: `${avgWinScore}% Score`,
-      sub: 'Powered by Gemini CE3.0 analysis',
+      sub: 'Powered by Gemini CE3.0 engine',
       icon: Award,
-      color: '#10b981',
-      bg: 'rgba(16, 185, 129, 0.12)'
+      color: '#10B981',
+      bg: 'rgba(16, 185, 129, 0.12)',
+      border: 'rgba(16, 185, 129, 0.25)'
     },
     {
-      title: 'Submitted to Acquirers',
+      title: 'Represented to Acquirers',
       value: `${submittedCount} Cases`,
-      sub: '1-Click Automated Submissions',
+      sub: 'Automated 1-click representments',
       icon: DollarSign,
-      color: '#06b6d4',
-      bg: 'rgba(6, 182, 212, 0.12)'
+      color: '#06B6D4',
+      bg: 'rgba(6, 182, 212, 0.12)',
+      border: 'rgba(6, 182, 212, 0.25)'
     }
   ];
 
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
       gap: '16px',
-      margin: '24px 32px'
+      margin: '24px 28px'
     }}>
       {stats.map((item, idx) => {
         const IconComp = item.icon;
         return (
           <div key={idx} className="glass-panel glass-card-interactive" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+              <span style={{ fontSize: '0.825rem', color: '#94A3B8', fontWeight: 500 }}>
                 {item.title}
               </span>
               <div style={{
@@ -67,18 +71,22 @@ export default function StatsOverview({ disputes = [] }) {
                 height: '36px',
                 borderRadius: '10px',
                 background: item.bg,
+                border: `1px solid ${item.border}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
-                <IconComp size={20} color={item.color} />
+                <IconComp size={18} color={item.color} />
               </div>
             </div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }}>
+            
+            <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#F8FAFC', letterSpacing: '-0.02em' }}>
               {item.value}
             </div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--text-dim)', marginTop: '4px' }}>
-              {item.sub}
+
+            <div style={{ fontSize: '0.78rem', color: '#64748B', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <ArrowUpRight size={12} color={item.color} />
+              <span>{item.sub}</span>
             </div>
           </div>
         );

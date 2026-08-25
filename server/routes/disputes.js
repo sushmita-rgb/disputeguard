@@ -205,6 +205,74 @@ router.post('/batch', async (req, res) => {
   }
 });
 
+/**
+ * POST /api/disputes/webhook-mock - Simulate Live Webhook Ingestion & Auto-Defense
+ */
+router.post('/webhook-mock', async (req, res) => {
+  try {
+    const randomId = `DISP-${Math.floor(100000 + Math.random() * 900000)}`;
+    const mockCase = {
+      disputeId: randomId,
+      amount: 520.00,
+      currency: 'USD',
+      reasonCode: '10.4',
+      reasonCategory: 'FRAUD',
+      customerName: 'Victoria Sterling',
+      customerEmail: 'v.sterling@luxeglobal.io',
+      chargebackDate: new Date(),
+      status: 'PENDING_REVIEW',
+      evidenceData: {
+        orderId: `ORD-${Math.floor(100000 + Math.random() * 900000)}`,
+        orderDate: '2026-08-20 14:10:00 UTC',
+        itemDescription: 'Designer Leather Executive Briefcase & Passport Set',
+        billingAddress: '550 Park Ave, New York, NY 10021',
+        shippingAddress: '550 Park Ave, New York, NY 10021',
+        carrier: 'FedEx Priority Express',
+        trackingNumber: '773910284910',
+        deliveryDate: '2026-08-22 11:15:00 UTC',
+        customerIp: '198.51.100.12 (AVS Zip Match: 10021)',
+        tosAcceptedAt: '2026-08-20 14:09:45 UTC',
+        digitalSignature: 'SIG_V_STERLING_TOKEN_99501',
+        additionalLogs: [
+          'AVS Result: Y (Street & 9-Digit Zip Match)',
+          'CVV Result: M (Match)',
+          '2FA SMS Challenge: PASSED (+1 212-555-0188)',
+          'Carrier Proof of Delivery: Signed by V. Sterling'
+        ]
+      }
+    };
+
+    // Auto-generate AI defense package via RocketRide/Gemini
+    try {
+      const pipelineRun = await rocketrideService.processDisputePipeline(mockCase);
+      mockCase.aiDefenseLetter = pipelineRun.result.aiDefenseLetter;
+      mockCase.winProbabilityScore = pipelineRun.result.winProbabilityScore;
+      mockCase.evidenceSummary = pipelineRun.result.evidenceSummary;
+    } catch (pipelineErr) {
+      const defense = await generateDefensePackage(mockCase);
+      mockCase.aiDefenseLetter = defense.aiDefenseLetter;
+      mockCase.winProbabilityScore = defense.winProbabilityScore;
+      mockCase.evidenceSummary = defense.evidenceSummary;
+    }
+
+    // Save to DB or Memory
+    try {
+      const newDoc = new Dispute(mockCase);
+      await newDoc.save();
+    } catch (dbErr) {
+      memoryStore.set(mockCase.disputeId, mockCase);
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: `🚨 Live Stripe Webhook: New $520.00 dispute (${mockCase.disputeId}) received and auto-defended by Gemini!`,
+      data: mockCase
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // Export memory store for seeding reference when offline
 module.exports = {
   router,

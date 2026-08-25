@@ -6,6 +6,13 @@ const disputeSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  userId: {
+    type: String
+  },
+  storeName: {
+    type: String,
+    default: 'Apex Store'
+  },
   amount: {
     type: Number,
     required: true

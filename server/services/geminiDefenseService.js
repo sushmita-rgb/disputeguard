@@ -46,10 +46,10 @@ Respond ONLY in raw JSON format (no markdown formatting codeblocks) with this JS
 }
 `;
 
-  if (apiKey && apiKey !== 'your_gemini_api_key_here') {
+  if (apiKey && apiKey !== 'your_gemini_api_key_here' && apiKey !== 'YOUR_GEMINI_API_KEY') {
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+      const model = genAI.getGenerativeModel({ model: 'gemini-3.6-flash' });
       const response = await model.generateContent(prompt);
       const responseText = response.response.text();
       const cleanJson = responseText.replace(/```json|```/g, '').trim();

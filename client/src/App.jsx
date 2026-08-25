@@ -4,9 +4,30 @@ import StatsOverview from './components/StatsOverview';
 import DisputeTable from './components/DisputeTable';
 import SideBySideReviewModal from './components/SideBySideReviewModal';
 import BatchUploadModal from './components/BatchUploadModal';
+import ProfileSettingsModal from './components/ProfileSettingsModal';
+import SplashScreen from './components/SplashScreen';
+import Auth from './pages/Auth';
 import { CheckCircle, AlertCircle, Info, Sparkles } from 'lucide-react';
 
 export default function App() {
+  const [showSplash, setShowSplash] = useState(true);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [settingsTab, setSettingsTab] = useState('profile');
+
+  // Auth & User State
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('cg_user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+
+  const [token, setToken] = useState(() => localStorage.getItem('cg_auth_token') || null);
+  const [authChecking, setAuthChecking] = useState(true);
+
+  // App / Dispute States
   const [disputes, setDisputes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -23,10 +44,50 @@ export default function App() {
     setTimeout(() => setToast(null), 4000);
   };
 
+  // Verify Auth Session on Mount
+  useEffect(() => {
+    async function checkAuthSession() {
+      const storedToken = localStorage.getItem('cg_auth_token');
+      if (!storedToken) {
+        setAuthChecking(false);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${storedToken}`
+          }
+        });
+        const data = await res.json();
+        if (data.success && data.user) {
+          setUser(data.user);
+          localStorage.setItem('cg_user', JSON.stringify(data.user));
+        } else {
+          // Token expired or invalid
+          handleLogout();
+        }
+      } catch (err) {
+        console.warn('Session verification network offline, relying on cached merchant profile:', err);
+      } finally {
+        setAuthChecking(false);
+      }
+    }
+
+    checkAuthSession();
+  }, []);
+
+  // Fetch disputes when logged in
   const fetchDisputes = async () => {
+    if (!token && !user) return;
     setIsRefreshing(true);
     try {
-      const res = await fetch('/api/disputes');
+      const res = await fetch('/api/disputes', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const data = await res.json();
       if (data.success) {
         setDisputes(data.data || []);
@@ -41,8 +102,28 @@ export default function App() {
   };
 
   useEffect(() => {
-    fetchDisputes();
-  }, []);
+    if (token || user) {
+      fetchDisputes();
+    }
+  }, [token, user]);
+
+  // Handle successful login/register/demo authentication
+  const handleAuthSuccess = (userData, authToken) => {
+    setUser(userData);
+    setToken(authToken);
+    localStorage.setItem('cg_user', JSON.stringify(userData));
+    localStorage.setItem('cg_auth_token', authToken);
+    showToast(`Welcome ${userData.name}! Store onboarding complete.`, 'success');
+  };
+
+  // Handle Merchant Logout
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem('cg_user');
+    localStorage.removeItem('cg_auth_token');
+    showToast('Logged out of merchant portal', 'info');
+  };
 
   // Trigger Gemini AI Defense Generation
   const handleTriggerDefend = async (disputeId) => {
@@ -53,7 +134,10 @@ export default function App() {
     try {
       const res = await fetch(`/api/disputes/${disputeId}/defend`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       });
       const data = await res.json();
       if (data.success) {
@@ -78,7 +162,10 @@ export default function App() {
     try {
       const res = await fetch(`/api/disputes/${disputeId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ aiDefenseLetter, status: 'APPROVED' })
       });
       const data = await res.json();
@@ -102,7 +189,10 @@ export default function App() {
       if (aiDefenseLetter) {
         await fetch(`/api/disputes/${disputeId}`, {
           method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
           body: JSON.stringify({ aiDefenseLetter })
         });
       }
@@ -110,7 +200,10 @@ export default function App() {
       // Then trigger submission endpoint
       const res = await fetch(`/api/disputes/${disputeId}/submit`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       });
       const data = await res.json();
       if (data.success) {
@@ -125,13 +218,18 @@ export default function App() {
     }
   };
 
+  const [isSimulatingWebhook, setIsSimulatingWebhook] = useState(false);
+
   // Batch Multi-case Ingestion
   const handleBatchSubmit = async (casesArray) => {
     setIsIngesting(true);
     try {
       const res = await fetch('/api/disputes/batch', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ cases: casesArray })
       });
       const data = await res.json();
@@ -149,14 +247,58 @@ export default function App() {
     }
   };
 
+  // Simulate Live Webhook Ingestion
+  const handleSimulateWebhook = async () => {
+    setIsSimulatingWebhook(true);
+    try {
+      const res = await fetch('/api/disputes/webhook-mock', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast(`🚨 New $520 Dispute Received & Auto-Defended by Gemini!`, 'success');
+        fetchDisputes();
+      } else {
+        showToast(`Webhook Error: ${data.error}`, 'error');
+      }
+    } catch (err) {
+      showToast('Error simulating live webhook ingestion', 'error');
+    } finally {
+      setIsSimulatingWebhook(false);
+    }
+  };
+
+  // Show Animated Intro Splash Screen
+  if (showSplash) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+  }
+
+  // If unauthenticated, show Auth & Onboarding Portal
+  if (!user || !token) {
+    return <Auth onAuthSuccess={handleAuthSuccess} />;
+  }
+
+  // Render Logged-in Merchant Dashboard
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       
-      {/* Top Header */}
+      {/* Top Header with Merchant Profile & Logout */}
       <Header
+        user={user}
+        onLogout={handleLogout}
         onOpenBatchUpload={() => setShowBatchModal(true)}
         onRefresh={fetchDisputes}
         isRefreshing={isRefreshing}
+        onOpenSettings={(tab) => {
+          setSettingsTab(tab || 'profile');
+          setShowSettingsModal(true);
+        }}
+        onSimulateWebhook={handleSimulateWebhook}
+        isSimulatingWebhook={isSimulatingWebhook}
       />
 
       {/* Toast Notification Banner */}
@@ -217,6 +359,22 @@ export default function App() {
         />
       )}
 
+      {/* Profile & Store Settings Modal */}
+      {showSettingsModal && (
+        <ProfileSettingsModal
+          user={user}
+          token={token}
+          onClose={() => setShowSettingsModal(false)}
+          onUpdateUser={(updatedUser) => {
+            setUser(updatedUser);
+            localStorage.setItem('cg_user', JSON.stringify(updatedUser));
+          }}
+          showToast={showToast}
+          initialTab={settingsTab}
+          onSimulateWebhook={handleSimulateWebhook}
+        />
+      )}
+
       {/* Footer */}
       <footer style={{
         padding: '16px 32px',
@@ -229,7 +387,7 @@ export default function App() {
         background: 'rgba(11, 15, 25, 0.6)'
       }}>
         <div>
-          ChargeGuard AI &copy; 2026 • RocketRide Buildathon Project (Problem Statement #1: Chargeback Defender)
+          Defendr &copy; 2026 • RocketRide Buildathon Project (Problem Statement #1: Chargeback Defender)
         </div>
         <div style={{ display: 'flex', gap: '16px' }}>
           <span>Visa CE3.0 Compliant</span>
