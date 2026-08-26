@@ -1,3 +1,4 @@
+import './index.css';
 const MOCK_DISPUTES = [
     {
       disputeId: 'DIS-2024-001',
@@ -346,6 +347,16 @@ export default function App() {
   const [toast, setToast] = useState<any>(null);
   // Show the AI Briefing popup once each time user logs in
   const [showBriefing, setShowBriefing] = useState(true);
+
+  // Inject Tailwind CSS Dynamic Fallback CDN script if not present
+  useEffect(() => {
+    if (!document.getElementById('tailwind-cdn')) {
+      const script = document.createElement('script');
+      script.id = 'tailwind-cdn';
+      script.src = 'https://cdn.tailwindcss.com';
+      document.head.appendChild(script);
+    }
+  }, []);
 
   const showToast = (message: any, type: string = 'info') => {
     setToast({ message, type });

@@ -79,5 +79,8 @@ export default defineConfig(() => ({
 	// assignment keeps working.
 	dev: { hmr: true, lazyCompilation: false, client: { protocol: 'ws', host: 'localhost', port: '<port>' } as const },
 	source: { entry: { index: './src/index.ts' } },
-	output: { assetPrefix: 'auto' },
+	output: {
+		injectStyles: true,
+		assetPrefix: 'auto',
+	},
 }));
