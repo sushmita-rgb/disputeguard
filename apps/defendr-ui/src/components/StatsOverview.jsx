@@ -62,7 +62,13 @@ export default function StatsOverview({ disputes = [] }) {
       {stats.map((item, idx) => {
         const IconComp = item.icon;
         return (
-          <div key={idx} className="glass-panel glass-card-interactive" style={{ padding: '20px' }}>
+          <div key={idx} className="glass-card-interactive" style={{
+            padding: '20px',
+            background: '#1E293B',
+            border: '1px solid #334155',
+            borderRadius: '14px',
+            boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.3)'
+          }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
               <span style={{ fontSize: '0.825rem', color: '#94A3B8', fontWeight: 500 }}>
                 {item.title}

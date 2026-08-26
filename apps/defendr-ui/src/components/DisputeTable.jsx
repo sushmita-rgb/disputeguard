@@ -63,7 +63,14 @@ export default function DisputeTable({ disputes = [], onSelectDispute, onTrigger
   };
 
   return (
-    <div className="glass-panel" style={{ margin: '0 28px 32px 28px', overflow: 'hidden' }}>
+    <div style={{
+      margin: '0 28px 32px 28px',
+      overflow: 'hidden',
+      background: '#1E293B',
+      border: '1px solid #334155',
+      borderRadius: '14px',
+      boxShadow: '0 4px 20px -2px rgba(0, 0, 0, 0.3)'
+    }}>
       {/* Table Toolbar */}
       <div style={{
         padding: '18px 24px',

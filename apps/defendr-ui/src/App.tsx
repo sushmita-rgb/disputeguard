@@ -781,7 +781,7 @@ We request that the chargeback be reversed in our favor.`;
 
   // Render Logged-in Merchant Dashboard
   return (
-    <div className="min-h-screen w-full bg-slate-950 text-slate-100 flex flex-col overflow-y-auto">
+    <div className="min-h-screen w-full flex flex-col overflow-y-auto" style={{ background: '#090D1A', color: '#F8FAFC', minHeight: '100vh' }}>
       
       {/* Top Header with Merchant Profile & Logout */}
       <Header
