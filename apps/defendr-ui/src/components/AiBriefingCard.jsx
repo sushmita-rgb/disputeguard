@@ -101,6 +101,7 @@ export default function AiBriefingCard({ merchantName = 'Alex', disputes = [], o
               : 'none',
           opacity: visible ? undefined : 0,
 
+          // Card surface
           borderRadius: '16px',
           padding: '24px',
           overflow: 'hidden',

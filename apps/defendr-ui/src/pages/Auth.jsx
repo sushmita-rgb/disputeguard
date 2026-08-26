@@ -55,10 +55,7 @@ export default function Auth({ onAuthSuccess }) {
       if (data.success) {
         onAuthSuccess(data.user, data.token);
       } else {
-        const errStr = typeof data.error === 'string'
-          ? data.error
-          : (data.error?.message || data.error?.error || JSON.stringify(data.error) || 'Authentication failed. Please try again.');
-        setErrorMessage(errStr || 'Authentication failed. Please try again.');
+        setErrorMessage(data.error || 'Authentication failed. Please try again.');
       }
     } catch (err) {
       setErrorMessage('Unable to connect to ChargeGuard AI server. Check backend network.');
@@ -297,7 +294,7 @@ export default function Auth({ onAuthSuccess }) {
               marginBottom: '18px',
               fontWeight: 500
             }}>
-              {typeof errorMessage === 'string' ? errorMessage : String(errorMessage)}
+              {errorMessage}
             </div>
           )}
 

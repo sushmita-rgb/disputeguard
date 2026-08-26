@@ -133,7 +133,7 @@ export default function BatchUploadModal({ onClose, onBatchSubmit, isIngesting }
               gap: '8px'
             }}>
               <AlertCircle size={16} />
-              {typeof errorMsg === 'string' ? errorMsg : (errorMsg?.message || String(errorMsg))}
+              {errorMsg}
             </div>
           )}
 

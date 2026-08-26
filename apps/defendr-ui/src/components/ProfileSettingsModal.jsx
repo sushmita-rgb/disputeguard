@@ -114,10 +114,7 @@ export default function ProfileSettingsModal({
         showToast('Profile & Store settings updated successfully!', 'success');
         onClose();
       } else {
-        const errStr = typeof data.error === 'string'
-          ? data.error
-          : (data.error?.message || data.error?.error || JSON.stringify(data.error) || 'Failed to update profile');
-        setErrorMessage(errStr || 'Failed to update profile');
+        setErrorMessage(data.error || 'Failed to update profile');
       }
     } catch (err) {
       setErrorMessage('Network error updating profile');
@@ -162,10 +159,7 @@ export default function ProfileSettingsModal({
         setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
         onClose();
       } else {
-        const errStr = typeof data.error === 'string'
-          ? data.error
-          : (data.error?.message || data.error?.error || JSON.stringify(data.error) || 'Failed to update password');
-        setErrorMessage(errStr || 'Failed to update password');
+        setErrorMessage(data.error || 'Failed to update password');
       }
     } catch (err) {
       setErrorMessage('Network error updating password');
@@ -308,12 +302,12 @@ export default function ProfileSettingsModal({
             gap: '8px'
           }}>
             <AlertCircle size={16} />
-            {typeof errorMessage === 'string' ? errorMessage : String(errorMessage)}
+            {errorMessage}
           </div>
         )}
 
         {/* Modal Body */}
-        <div style={{ padding: '24px', background: '#0F172A', minHeight: '360px', overflowY: 'auto' }}>
+        <div style={{ padding: '24px', background: '#0F172A', minHeight: '360px' }}>
           
           {/* TAB 1: Account & Profile Settings */}
           {activeTab === 'profile' && (
@@ -772,7 +766,7 @@ export default function ProfileSettingsModal({
                 gap: '10px'
               }}>
                 <Zap size={20} color="#10B981" />
-                <span>Configure autonomous policy thresholds for instant 1-click &amp; auto-pilot dispute representments.</span>
+                <span>Configure autonomous policy thresholds for instant 1-click & auto-pilot dispute representments.</span>
               </div>
 
               {/* Toggle 1: Auto-pilot low risk */}
@@ -829,9 +823,9 @@ export default function ProfileSettingsModal({
                     }}
                   >
                     <option value="USD" style={{ background: '#0F172A' }}>USD ($)</option>
-                    <option value="INR" style={{ background: '#0F172A' }}>INR (&#8377;)</option>
-                    <option value="EUR" style={{ background: '#0F172A' }}>EUR (&#8364;)</option>
-                    <option value="GBP" style={{ background: '#0F172A' }}>GBP (&#163;)</option>
+                    <option value="INR" style={{ background: '#0F172A' }}>INR (₹)</option>
+                    <option value="EUR" style={{ background: '#0F172A' }}>EUR (€)</option>
+                    <option value="GBP" style={{ background: '#0F172A' }}>GBP (£)</option>
                     <option value="CAD" style={{ background: '#0F172A' }}>CAD ($)</option>
                   </select>
                 </div>

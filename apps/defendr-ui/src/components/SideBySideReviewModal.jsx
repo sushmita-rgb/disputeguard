@@ -291,6 +291,7 @@ export default function SideBySideReviewModal({ dispute, onClose, onSaveDraft, o
                   </span>
                 </div>
               </div>
+
               <button
                 onClick={() => onRegenerate(dispute.disputeId)}
                 className="btn btn-secondary"

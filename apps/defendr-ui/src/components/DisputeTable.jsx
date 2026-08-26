@@ -53,7 +53,7 @@ export default function DisputeTable({ disputes = [], onSelectDispute, onTrigger
 
   // Helper for deadline calculation display
   const getDeadlineText = (dispute) => {
-    if (dispute.status === 'SUBMITTED' || dispute.status === 'SUBMITTED TO BANK' || dispute.status === 'WON') {
+    if (dispute.status === 'SUBMITTED' || dispute.status === 'WON' || dispute.status === 'SUBMITTED TO BANK') {
       return <span style={{ color: '#34D399', fontSize: '0.75rem', fontWeight: 600 }}>Bank Processing</span>;
     }
     return (
