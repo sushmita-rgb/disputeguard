@@ -56,7 +56,7 @@ export default function Header({ user, onLogout, onOpenBatchUpload, onRefresh, i
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <img
-            src="/logo.png"
+            src="/icon.png"
             alt="Defendr Logo"
             style={{
               height: '38px',

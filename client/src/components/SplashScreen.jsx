@@ -172,7 +172,7 @@ export default function SplashScreen({ onComplete }) {
 
           {/* Logo Image */}
           <img
-            src="/logo.png"
+            src="/icon.png"
             alt="Defendr Logo"
             style={{
               width: '96px',

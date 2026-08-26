@@ -126,7 +126,7 @@ export default function Auth({ onAuthSuccess }) {
             {/* Logo */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '32px' }}>
               <img
-                src="/logo.png"
+                src="/icon.png"
                 alt="Defendr Logo"
                 style={{
                   height: '52px',
