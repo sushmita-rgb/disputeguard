@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import logoImg from '../assets/icon.png';
 import { FastForward, ShieldCheck, Sparkles } from 'lucide-react';
 
 export default function SplashScreen({ onComplete }) {
@@ -170,21 +171,7 @@ export default function SplashScreen({ onComplete }) {
             filter: 'blur(10px)'
           }} />
 
-          {/* Shield Icon fallback for logo */}
-          <div style={{
-            width: '96px',
-            height: '96px',
-            borderRadius: '16px',
-            background: 'linear-gradient(135deg, #3B82F6 0%, #10B981 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 25px rgba(59, 130, 246, 0.6)',
-            position: 'relative',
-            animation: 'zoomIn 0.8s ease-out'
-          }}>
-            <ShieldCheck size={52} color="#ffffff" />
-          </div>
+          <img src={logoImg} alt="Defendr Logo" className="h-20 w-20 object-contain drop-shadow-xl animate-pulse" />
         </div>
 
         {/* Title */}

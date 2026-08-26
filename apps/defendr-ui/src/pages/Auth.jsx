@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logoImg from '../assets/icon.png';
 import {
   ShieldCheck,
   Zap,
@@ -127,17 +128,7 @@ export default function Auth({ onAuthSuccess }) {
           <div>
             {/* Logo */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '32px' }}>
-              <div style={{
-                width: '52px',
-                height: '52px',
-                borderRadius: '10px',
-                background: 'linear-gradient(135deg, #3B82F6 0%, #10B981 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <ShieldCheck size={30} color="#ffffff" />
-              </div>
+              <img src={logoImg} alt="Defendr Logo" className="h-12 w-12 object-contain" />
               <div>
                 <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, letterSpacing: '-0.02em', color: '#F8FAFC' }}>
                   Defend<span style={{ color: '#10B981' }}>r</span>

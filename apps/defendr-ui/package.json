@@ -9,7 +9,7 @@
     "publisher": "sushmita_dev",
     "name": "Defendr",
     "description": "Defendr — a RocketRide app",
-    "icon": "./icon.png",
+    "icon": "./icon.svg",
     "readme": "./README.md",
     "categories": [
       "custom"
