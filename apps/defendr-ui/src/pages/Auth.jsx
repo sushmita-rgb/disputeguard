@@ -33,6 +33,15 @@ export default function Auth({ onAuthSuccess }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (errorMessage) setErrorMessage('');
   };
+  const getErrorMessage = (err) => {
+    if (!err) return '';
+    if (typeof err === 'string') return err;
+    if (err?.response?.data?.message && typeof err.response.data.message === 'string') return err.response.data.message;
+    if (err?.response?.data?.error && typeof err.response.data.error === 'string') return err.response.data.error;
+    if (err?.message && typeof err.message === 'string') return err.message;
+    if (err?.error && typeof err.error === 'string') return err.error;
+    return 'An error occurred';
+  };
 
   // Handle Login or Register Submit
   const handleSubmit = async (e) => {
@@ -54,38 +63,37 @@ export default function Auth({ onAuthSuccess }) {
       if (data.success) {
         onAuthSuccess(data.user, data.token);
       } else {
-        setErrorMessage(data.error || 'Authentication failed. Please try again.');
+        setErrorMessage(getErrorMessage(data.error || 'Authentication failed. Please try again.'));
       }
     } catch (err) {
-      setErrorMessage('Unable to connect to ChargeGuard AI server. Check backend network.');
+      setErrorMessage(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle Instant 1-Click Demo Login
-  const handleDemoLogin = async () => {
+  // Handle Instant 1-Click Demo Login — fully offline, no backend required
+  const handleDemoLogin = () => {
+    setErrorMessage(''); // clear any prior error banner
     setDemoLoading(true);
-    setErrorMessage('');
 
-    try {
-      const res = await fetch('/api/auth/demo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
+    setTimeout(() => {
+      const demoUser = {
+        id: 'usr_alex_mercer',
+        name: 'Alex Mercer',
+        email: 'merchant@apexstore.com',
+        role: 'Merchant Admin',
+        storeName: 'Apex Store',
+        platform: 'Stripe',
+        currency: 'USD'
+      };
 
-      const data = await res.json();
+      localStorage.setItem('defendr_user', JSON.stringify(demoUser));
+      localStorage.setItem('defendr_token', 'demo_token_authenticated');
 
-      if (data.success) {
-        onAuthSuccess(data.user, data.token);
-      } else {
-        setErrorMessage(data.error || 'Instant demo login failed');
-      }
-    } catch (err) {
-      setErrorMessage('Network error during demo login');
-    } finally {
       setDemoLoading(false);
-    }
+      if (onAuthSuccess) onAuthSuccess(demoUser, 'demo_token_authenticated');
+    }, 300);
   };
 
   return (
@@ -292,17 +300,8 @@ export default function Auth({ onAuthSuccess }) {
           </div>
 
           {/* Error Banner */}
-          {errorMessage && (
-            <div style={{
-              padding: '10px 14px',
-              borderRadius: '8px',
-              background: 'rgba(244, 63, 94, 0.15)',
-              border: '1px solid rgba(244, 63, 94, 0.3)',
-              color: '#FB7185',
-              fontSize: '0.8rem',
-              marginBottom: '18px',
-              fontWeight: 500
-            }}>
+          {typeof errorMessage === 'string' && errorMessage && (
+            <div className="p-3 mb-4 rounded-lg bg-red-950/50 border border-red-500/30 text-red-400 text-xs">
               {errorMessage}
             </div>
           )}

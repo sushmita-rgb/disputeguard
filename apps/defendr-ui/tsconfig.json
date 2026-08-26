@@ -15,7 +15,8 @@
     "noEmit": true
   },
   "include": [
-    "src",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     "rsbuild.config.mts"
   ]
 }

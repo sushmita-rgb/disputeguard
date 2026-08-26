@@ -50,6 +50,16 @@ export default function ProfileSettingsModal({
     setActiveTab(normalizeTab(initialTab));
   }, [initialTab]);
 
+  const getErrorMessage = (err) => {
+    if (!err) return '';
+    if (typeof err === 'string') return err;
+    if (err?.response?.data?.message && typeof err.response.data.message === 'string') return err.response.data.message;
+    if (err?.response?.data?.error && typeof err.response.data.error === 'string') return err.response.data.error;
+    if (err?.message && typeof err.message === 'string') return err.message;
+    if (err?.error && typeof err.error === 'string') return err.error;
+    return 'An error occurred';
+  };
+
   // Profile Form State with Null Safety Defaults
   const [profileData, setProfileData] = useState({
     name: user?.name || 'Alex Mercer',
@@ -114,10 +124,10 @@ export default function ProfileSettingsModal({
         showToast('Profile & Store settings updated successfully!', 'success');
         onClose();
       } else {
-        setErrorMessage(data.error || 'Failed to update profile');
+        setErrorMessage(getErrorMessage(data.error || 'Failed to update profile'));
       }
     } catch (err) {
-      setErrorMessage('Network error updating profile');
+      setErrorMessage(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -159,10 +169,10 @@ export default function ProfileSettingsModal({
         setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
         onClose();
       } else {
-        setErrorMessage(data.error || 'Failed to update password');
+        setErrorMessage(getErrorMessage(data.error || 'Failed to update password'));
       }
     } catch (err) {
-      setErrorMessage('Network error updating password');
+      setErrorMessage(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
@@ -288,19 +298,8 @@ export default function ProfileSettingsModal({
         </div>
 
         {/* Error Banner */}
-        {errorMessage && (
-          <div style={{
-            margin: '16px 24px 0 24px',
-            padding: '10px 14px',
-            borderRadius: '8px',
-            background: 'rgba(244, 63, 94, 0.15)',
-            border: '1px solid rgba(244, 63, 94, 0.3)',
-            color: '#FB7185',
-            fontSize: '0.8rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}>
+        {typeof errorMessage === 'string' && errorMessage && (
+          <div className="p-3 mb-4 rounded-lg bg-red-950/50 border border-red-500/30 text-red-400 text-xs flex items-center gap-2" style={{ margin: '16px 24px 0 24px' }}>
             <AlertCircle size={16} />
             {errorMessage}
           </div>
