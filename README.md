@@ -114,45 +114,74 @@ npm run seed      # Seeds 5 realistic dispute test cases (Fraud, Item Not Receiv
 npm start         # Starts backend API on http://localhost:5000
 ```
 
-### 4. Frontend Setup
+### 4. Frontend Setup (Standalone)
 ```bash
 cd client
 npm install
-npm run dev       # Launches React dashboard on http://localhost:3000
+npm run dev       # Launches Vite React dashboard on http://localhost:3000
 ```
 
----
+### 5. Defendr UI Micro-frontend Setup (RocketRide App Integration)
+The application compiles into an isolated Module Federation remote loaded by the RocketRide App Builder platform:
+```bash
+cd apps/defendr-ui
+pnpm install
+pnpm run dev      # Launches local MFE remote server on http://localhost:3580 / http://localhost:3581
+```
 
-## 📡 API Reference (`server/routes/disputes.js`)
-
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| **GET** | `/api/health` | System status & Gemini/RocketRide status check |
-| **GET** | `/api/disputes` | List all active chargeback cases with search & status filters |
-| **GET** | `/api/disputes/:id` | Retrieve single dispute details & evidence proof |
-| **POST** | `/api/disputes/:id/defend` | Trigger RocketRide pipeline & Gemini LLM defense generation |
-| **PUT** | `/api/disputes/:id` | Update edited defense letter draft or status |
-| **POST** | `/api/disputes/:id/submit` | Human-in-the-loop 1-click submit to acquiring bank network |
-| **POST** | `/api/disputes/batch` | Ingest multiple dispute cases in bulk |
-
----
-
-## 🛡️ Seeded Dispute Test Cases
-
-ChargeGuard AI comes pre-loaded with 5 realistic dispute scenarios covering major chargeback reason codes:
-
-1. **`DISP-892041` (Reason 10.4 - Fraud)**: UltraBook purchase with AVS/CVV match, FedEx signature delivery proof, and IP geolocation verification.
-2. **`DISP-402918` (Reason 13.1 - Item Not Received)**: Executive Task Chair shipment with UPS dock receipt signature and GPS delivery logs.
-3. **`DISP-118492` (Reason 10.4 - Unrecognized Charge)**: Enterprise SaaS annual subscription with OAuth2 login logs and 142 active session audits.
-4. **`DISP-559382` (Reason 13.6 - Credit Not Processed)**: Camping tent purchase with partial refund credit transaction reference (ARN).
-5. **`DISP-992015` (Reason 13.2 - Service Not Rendered)**: FinTech event VIP sponsorship with venue QR badge scan audit records.
+To run and package inside the App Builder:
+1. Open the `.rrapp` builder file inside the workspace shell.
+2. Select the **Package** tab to configure MFE manifest packaging rules.
+3. Access the **Deploy** tab to publish to RocketRide staging cloud.
 
 ---
 
-## 🏆 Key Features & Highlights
+## 🚀 Deployed Staging Cloud & App Platform Integration
 
-- **RocketRide Pipeline Integration**: Standardized pipeline file (`pipelines/dispute_defense.pipe`) defining data lanes and Gemini LLM nodes.
-- **Google Gemini 1.5 Engine**: Specialized card network representment prompts producing Visa CE3.0 compliant rebuttal briefs.
-- **Side-by-Side Inspector**: Dual-pane modal allowing human risk analysts to inspect evidence proofs alongside editable AI briefs.
-- **Human-in-the-Loop Action Bar**: One-click approval and submission workflow ensuring complete human governance before bank transmission.
-- **Batch Multi-Case Ingestion**: Ingest multi-case JSON payloads to demonstrate high-throughput automated processing.
+Defendr is integrated with **RocketRide Cloud staging (`https://staging.rocketride.ai`)** under the MFE app ID `sushmita_dev.defendr`.
+
+To ensure optimal operations when loaded in the sandboxed cloud shell, we implemented the following container-focused architectural safeguards:
+1. **Dynamic Tailwind Inlining**:
+   Rsbuild compiles and inlines Tailwind CSS stylesheet rules directly inside the exposed Javascript bundle (`injectStyles: true`), resolving asset 404s when loading the CSS resources remotely.
+2. **Branding Integrity (Inline SVG Logos)**:
+   Replaced all relative icon/logo file calls with 100% inline SVG vector layouts to prevent broken logo images due to origin mismatches in the micro-frontend shell environment.
+3. **Local Storage Hybrid State Engine**:
+   When network proxy calls fail or staging services respond with Access Denied, the app degrades gracefully into secure client-side sandbox mode, loading dispute data from `localStorage` fallbacks so all main workflows operate correctly with zero server-side exceptions.
+
+---
+
+## 🛠️ Walkthrough & Usage Steps
+
+Here is the step-by-step user flow demonstrating the capabilities of Defendr:
+
+### Step 1: Demo Sandbox Authentication
+- When the dashboard is accessed, a premium animated Intro Splash Screen loads.
+- If not authenticated, the onboarding screen is presented. Click the **Demo Login** button to authenticate cleanly.
+- The app bypasses external network validations and registers a local session token `demo_token_authenticated`.
+
+### Step 2: Dashboard Overview & KPIs
+- The merchant main dashboard renders 4 core metrics (Total Disputed Volume, Pending Review cases, Average Gemini Win Probability score, and Submitted Representments) in a wide, high-contrast, responsive grid.
+- A filterable queue table renders active disputes.
+
+### Step 3: Simulating Dispute Ingestion (Stripe Webhook)
+- Click the **Simulate Stripe Dispute** action in the header.
+- The simulator mimics a live payment gateway callback, injecting a new $520.00 chargeback (`DIS-2026-6292`) into local storage.
+- A success toast is displayed, and the metrics are updated.
+
+### Step 4: AI Rebuttal Defense Synthesis
+- Find a case marked as `Pending Review` (e.g. `DIS-2024-001`) and click **AI Defend**.
+- An active loader displays while Gemini AI constructs the representment package, matching network rules (such as AVS matches, FedEx tracking details, or clickwrap agreements) and calculating the Win Probability.
+
+### Step 5: Side-by-Side Representment Review
+- Click **Review & Edit** on the defended dispute.
+- The inspect modal displays evidence details (Carrier signature tracking, billing footprint, IP address check) on the left, alongside the editable Gemini Defense Letter brief on the right.
+- You can edit the text and click **Save Draft**.
+
+### Step 6: Bank Representment Submission
+- Click **Submit to Bank** inside the review modal.
+- The status changes to `'SUBMITTED TO BANK'`, indicating the representation is transmitting to card processors.
+
+### Step 7: Batch Case Ingestion
+- Click **Batch Ingest** in the header.
+- Paste multiple case JSON strings into the console and submit to demonstrate automated processing.
+
