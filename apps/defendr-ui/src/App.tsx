@@ -355,8 +355,39 @@ export default function App() {
   // Verify Auth Session on Mount
   useEffect(() => {
     async function checkAuthSession() {
-      const storedToken = localStorage.getItem('cg_auth_token');
+      const storedToken = localStorage.getItem('cg_auth_token') || localStorage.getItem('defendr_token');
       if (!storedToken) {
+        setAuthChecking(false);
+        setIsLoading(false);
+        return;
+      }
+      if (storedToken === 'demo_token_authenticated') {
+        const savedUser = localStorage.getItem('cg_user') || localStorage.getItem('defendr_user');
+        if (savedUser) {
+          try {
+            setUser(JSON.parse(savedUser));
+          } catch (e) {
+            setUser({
+              id: 'usr_alex_mercer',
+              name: 'Alex Mercer',
+              email: 'merchant@apexstore.com',
+              role: 'Merchant Admin',
+              storeName: 'Apex Store',
+              platform: 'Stripe',
+              currency: 'USD'
+            });
+          }
+        } else {
+          setUser({
+            id: 'usr_alex_mercer',
+            name: 'Alex Mercer',
+            email: 'merchant@apexstore.com',
+            role: 'Merchant Admin',
+            storeName: 'Apex Store',
+            platform: 'Stripe',
+            currency: 'USD'
+          });
+        }
         setAuthChecking(false);
         setIsLoading(false);
         return;

@@ -6,10 +6,9 @@
   "license": "MIT",
   "appManifest": {
     "id": "sushmita_dev.defendr",
-    "publisher": "sushmita_dev",
-    "name": "Defendr",
-    "description": "Defendr — a RocketRide app",
-    "icon": "./icon.png",
+    "displayName": "Defendr",
+    "description": "Autonomous Merchant Chargeback & Dispute Defense Suite",
+    "icon": "icon.png",
     "readme": "./README.md",
     "categories": [
       "custom"
