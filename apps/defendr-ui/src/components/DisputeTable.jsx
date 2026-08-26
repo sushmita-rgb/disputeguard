@@ -64,7 +64,7 @@ export default function DisputeTable({ disputes = [], onSelectDispute, onTrigger
 
   return (
     <div style={{
-      margin: '0 28px 32px 28px',
+      margin: '0 0 32px 0',
       overflow: 'hidden',
       background: '#1E293B',
       border: '1px solid #334155',

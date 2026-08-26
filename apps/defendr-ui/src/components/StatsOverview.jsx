@@ -55,9 +55,9 @@ export default function StatsOverview({ disputes = [] }) {
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+      gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
       gap: '16px',
-      margin: '24px 28px'
+      margin: '24px 0'
     }}>
       {stats.map((item, idx) => {
         const IconComp = item.icon;
