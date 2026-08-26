@@ -1,0 +1,43 @@
+{
+  "name": "sushmita_dev-defendr",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Defendr — a RocketRide app",
+  "license": "MIT",
+  "appManifest": {
+    "id": "sushmita_dev.defendr",
+    "publisher": "sushmita_dev",
+    "name": "Defendr",
+    "description": "Defendr — a RocketRide app",
+    "icon": "./icon.png",
+    "readme": "./README.md",
+    "categories": [
+      "custom"
+    ],
+    "mode": "free",
+    "authenticated": false,
+    "projectId": "2bc58125-7822-4bfc-8018-3c35a85fce8b"
+  },
+  "scripts": {
+    "dev": "rsbuild dev",
+    "build": "tsc --noEmit && rsbuild build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "lucide-react": "^0.400.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rocketride": "file:../../.rocketride/client/rocketride.tgz",
+    "shell": "file:../../.rocketride/shell/shell.tgz"
+  },
+  "devDependencies": {
+    "@module-federation/rsbuild-plugin": "2.5.1",
+    "@rsbuild/core": "~2.0.11",
+    "@rsbuild/plugin-react": "~2.0.1",
+    "@types/node": "^20.19.41",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react-refresh": "^0.14.2",
+    "typescript": "^5.3.0"
+  }
+}
