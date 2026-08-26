@@ -33,6 +33,12 @@
   padding: 0;
 }
 
+html, body, #root {
+  height: auto;
+  min-height: 100%;
+  overflow-y: auto !important;
+}
+
 body {
   background-color: var(--bg-dark);
   background-image: 

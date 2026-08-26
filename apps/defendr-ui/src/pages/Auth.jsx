@@ -133,16 +133,12 @@ export default function Auth({ onAuthSuccess }) {
           <div>
             {/* Logo */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '32px' }}>
-              <img
-                src="/icon.png"
-                alt="Defendr Logo"
-                style={{
-                  height: '52px',
-                  width: 'auto',
-                  borderRadius: '10px',
-                  objectFit: 'contain'
-                }}
-              />
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-600 via-blue-700 to-slate-900 p-2 flex items-center justify-center border border-blue-400/40 shadow-md flex-shrink-0">
+                <svg viewBox="0 0 24 24" fill="none" className="w-full h-full text-cyan-300" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#1D4ED8" fillOpacity="0.4"/>
+                  <path d="M13 7l-4 5h4l-2 5 6-7h-4l2-3z" fill="#10B981" stroke="#FFFFFF" strokeWidth="0.8"/>
+                </svg>
+              </div>
               <div>
                 <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, letterSpacing: '-0.02em', color: '#F8FAFC' }}>
                   Defend<span style={{ color: '#10B981' }}>r</span>

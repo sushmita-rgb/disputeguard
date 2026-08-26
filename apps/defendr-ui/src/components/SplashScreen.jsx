@@ -170,20 +170,12 @@ export default function SplashScreen({ onComplete }) {
             filter: 'blur(10px)'
           }} />
 
-          {/* Logo Image */}
-          <img
-            src="/icon.png"
-            alt="Defendr Logo"
-            style={{
-              width: '96px',
-              height: '96px',
-              objectFit: 'contain',
-              borderRadius: '16px',
-              filter: 'drop-shadow(0 0 25px rgba(59, 130, 246, 0.6))',
-              position: 'relative',
-              animation: 'zoomIn 0.8s ease-out'
-            }}
-          />
+          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-600 via-blue-700 to-slate-900 p-3.5 flex items-center justify-center border border-blue-400/40 shadow-2xl animate-pulse">
+            <svg viewBox="0 0 24 24" fill="none" className="w-full h-full text-cyan-300" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#1D4ED8" fillOpacity="0.4"/>
+              <path d="M13 7l-4 5h4l-2 5 6-7h-4l2-3z" fill="#10B981" stroke="#FFFFFF" strokeWidth="0.8"/>
+            </svg>
+          </div>
         </div>
 
         {/* Title */}

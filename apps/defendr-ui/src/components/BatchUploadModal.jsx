@@ -63,8 +63,8 @@ export default function BatchUploadModal({ onClose, onBatchSubmit, isIngesting }
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" style={{ maxWidth: '750px' }} onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto" onClick={onClose}>
+      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl my-8" onClick={(e) => e.stopPropagation()}>
         
         {/* Modal Header */}
         <div style={{

@@ -597,7 +597,7 @@ export default function App() {
 
   // Render Logged-in Merchant Dashboard
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="min-h-screen w-full bg-slate-950 text-slate-100 flex flex-col overflow-y-auto">
       
       {/* Top Header with Merchant Profile & Logout */}
       <Header

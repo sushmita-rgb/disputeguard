@@ -180,33 +180,23 @@ export default function DisputeTable({ disputes = [], onSelectDispute, onTrigger
                     </td>
 
                     <td style={{ padding: '16px 16px' }}>
-                      <div style={{ fontWeight: 600, color: '#F8FAFC' }}>{d.customerName}</div>
-                      <div style={{ fontSize: '0.78rem', color: '#94A3B8' }}>{d.customerEmail}</div>
+                      <span className="font-semibold text-slate-100">{d.customerName}</span>
+                      <span className="text-slate-400 text-xs block">{d.customerEmail}</span>
                     </td>
 
                     <td style={{ padding: '16px 16px' }}>
-                      <span style={{
-                        background: '#0F172A',
-                        padding: '4px 8px',
-                        borderRadius: '6px',
-                        fontSize: '0.75rem',
-                        fontFamily: 'var(--font-mono)',
-                        border: '1px solid #334155',
-                        color: '#CBD5E1'
-                      }}>
-                        {d.reasonCode} ({d.reasonCategory || 'FRAUD'})
-                      </span>
+                      <span className="px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-200 text-xs font-mono">{d.reasonCode}</span>
                     </td>
 
-                    <td style={{ padding: '16px 16px', fontWeight: 700, color: '#F8FAFC' }}>
-                      {d.currency} ${d.amount.toFixed(2)}
+                    <td style={{ padding: '16px 16px' }}>
+                      <span className="font-bold text-white text-sm">USD ${d.amount.toFixed(2)}</span>
                     </td>
 
                     <td style={{ padding: '16px 16px', fontSize: '0.8rem', color: '#94A3B8' }}>
                       {d.evidenceData?.carrier ? (
                         <div>
                           <div style={{ color: '#E2E8F0', fontWeight: 500 }}>{d.evidenceData.carrier}</div>
-                          <div style={{ fontSize: '0.75rem', color: '#38BDF8', fontFamily: 'var(--font-mono)' }}>{d.evidenceData.trackingNumber}</div>
+                          <span className="font-mono text-cyan-400 text-xs hover:underline">{d.evidenceData.trackingNumber}</span>
                         </div>
                       ) : (
                         <span style={{ fontStyle: 'italic', color: '#64748B' }}>Digital SaaS</span>
