@@ -4,8 +4,8 @@ import { ShieldAlert, DollarSign, Award, Clock, ArrowUpRight } from 'lucide-reac
 export default function StatsOverview({ disputes = [] }) {
   const totalCount = disputes.length;
   const totalAmount = disputes.reduce((sum, d) => sum + (d.amount || 0), 0);
-  const pendingCount = disputes.filter(d => d.status === 'PENDING_REVIEW' || d.status === 'PENDING').length;
-  const submittedCount = disputes.filter(d => d.status === 'SUBMITTED' || d.status === 'APPROVED' || d.status === 'SUBMITTED TO BANK').length;
+  const pendingCount = disputes.filter(d => d.status === 'PENDING_REVIEW').length;
+  const submittedCount = disputes.filter(d => d.status === 'SUBMITTED' || d.status === 'APPROVED').length;
 
   const validScores = disputes.filter(d => d.winProbabilityScore > 0);
   const avgWinScore = validScores.length > 0

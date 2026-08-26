@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import logoImg from '../assets/icon.png';
 import {
   ShieldCheck,
   Upload,
@@ -56,7 +55,16 @@ export default function Header({ user, onLogout, onOpenBatchUpload, onRefresh, i
       {/* Brand & Connected Store Badge */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <img src={logoImg} alt="Defendr" className="h-9 w-9 object-contain drop-shadow" />
+          <img
+            src="/icon.png"
+            alt="Defendr Logo"
+            style={{
+              height: '38px',
+              width: 'auto',
+              borderRadius: '8px',
+              objectFit: 'contain'
+            }}
+          />
           <div>
             <h1 style={{ fontSize: '1.35rem', fontWeight: 800, letterSpacing: '-0.02em', margin: 0, color: '#F8FAFC' }}>
               Defend<span style={{ color: '#10B981' }}>r</span>

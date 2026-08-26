@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import logoImg from '../assets/icon.png';
 import { FastForward, ShieldCheck, Sparkles } from 'lucide-react';
 
 export default function SplashScreen({ onComplete }) {
@@ -171,7 +170,20 @@ export default function SplashScreen({ onComplete }) {
             filter: 'blur(10px)'
           }} />
 
-          <img src={logoImg} alt="Defendr Logo" className="h-20 w-20 object-contain drop-shadow-xl animate-pulse" />
+          {/* Logo Image */}
+          <img
+            src="/icon.png"
+            alt="Defendr Logo"
+            style={{
+              width: '96px',
+              height: '96px',
+              objectFit: 'contain',
+              borderRadius: '16px',
+              filter: 'drop-shadow(0 0 25px rgba(59, 130, 246, 0.6))',
+              position: 'relative',
+              animation: 'zoomIn 0.8s ease-out'
+            }}
+          />
         </div>
 
         {/* Title */}

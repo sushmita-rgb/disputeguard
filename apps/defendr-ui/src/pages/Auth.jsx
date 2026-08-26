@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import logoImg from '../assets/icon.png';
 import {
   ShieldCheck,
   Zap,
@@ -64,28 +63,29 @@ export default function Auth({ onAuthSuccess }) {
     }
   };
 
-  // Handle Instant 1-Click Demo Login — fully offline, no backend required
-  const handleDemoLogin = () => {
-    setErrorMessage(''); // clear any prior error banner
+  // Handle Instant 1-Click Demo Login
+  const handleDemoLogin = async () => {
     setDemoLoading(true);
+    setErrorMessage('');
 
-    setTimeout(() => {
-      const demoUser = {
-        id: 'usr_alex_mercer',
-        name: 'Alex Mercer',
-        email: 'merchant@apexstore.com',
-        role: 'Merchant Admin',
-        storeName: 'Apex Store',
-        platform: 'Stripe',
-        currency: 'USD'
-      };
+    try {
+      const res = await fetch('/api/auth/demo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
 
-      localStorage.setItem('defendr_user', JSON.stringify(demoUser));
-      localStorage.setItem('defendr_token', 'demo_token_authenticated');
+      const data = await res.json();
 
+      if (data.success) {
+        onAuthSuccess(data.user, data.token);
+      } else {
+        setErrorMessage(data.error || 'Instant demo login failed');
+      }
+    } catch (err) {
+      setErrorMessage('Network error during demo login');
+    } finally {
       setDemoLoading(false);
-      if (onAuthSuccess) onAuthSuccess(demoUser, 'demo_token_authenticated');
-    }, 300);
+    }
   };
 
   return (
@@ -125,7 +125,16 @@ export default function Auth({ onAuthSuccess }) {
           <div>
             {/* Logo */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '32px' }}>
-              <img src={logoImg} alt="Defendr Logo" className="h-12 w-12 object-contain" />
+              <img
+                src="/icon.png"
+                alt="Defendr Logo"
+                style={{
+                  height: '52px',
+                  width: 'auto',
+                  borderRadius: '10px',
+                  objectFit: 'contain'
+                }}
+              />
               <div>
                 <h1 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, letterSpacing: '-0.02em', color: '#F8FAFC' }}>
                   Defend<span style={{ color: '#10B981' }}>r</span>

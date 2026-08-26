@@ -19,12 +19,10 @@ export default function DisputeTable({ disputes = [], onSelectDispute, onTrigger
   const getStatusBadge = (status) => {
     switch (status) {
       case 'PENDING_REVIEW':
-      case 'PENDING':
         return <span className="badge badge-pending"><AlertTriangle size={12} /> Pending Review</span>;
       case 'APPROVED':
         return <span className="badge badge-approved"><CheckCircle2 size={12} /> Draft Approved</span>;
       case 'SUBMITTED':
-      case 'SUBMITTED TO BANK':
         return <span className="badge badge-submitted"><Shield size={12} /> Submitted to Bank</span>;
       case 'WON':
         return <span className="badge badge-won"><CheckCircle2 size={12} /> Case Won</span>;
@@ -53,7 +51,7 @@ export default function DisputeTable({ disputes = [], onSelectDispute, onTrigger
 
   // Helper for deadline calculation display
   const getDeadlineText = (dispute) => {
-    if (dispute.status === 'SUBMITTED' || dispute.status === 'WON' || dispute.status === 'SUBMITTED TO BANK') {
+    if (dispute.status === 'SUBMITTED' || dispute.status === 'WON') {
       return <span style={{ color: '#34D399', fontSize: '0.75rem', fontWeight: 600 }}>Bank Processing</span>;
     }
     return (
@@ -64,7 +62,7 @@ export default function DisputeTable({ disputes = [], onSelectDispute, onTrigger
   };
 
   return (
-    <div className="w-full overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/70 shadow-sm">
+    <div className="glass-panel" style={{ margin: '0 28px 32px 28px', overflow: 'hidden' }}>
       {/* Table Toolbar */}
       <div style={{
         padding: '18px 24px',

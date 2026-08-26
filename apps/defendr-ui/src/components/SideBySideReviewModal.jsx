@@ -299,7 +299,7 @@ export default function SideBySideReviewModal({ dispute, onClose, onSaveDraft, o
                 style={{ padding: '7px 12px', fontSize: '0.78rem' }}
               >
                 <Sparkles size={14} className={isRegenerating ? 'spin-icon' : ''} />
-                {isRegenerating ? '🤖 RocketRide & Gemini CE3.0 Synthesizing Defense...' : '✨ Re-run Gemini Defense'}
+                {isRegenerating ? 'Analyzing...' : 'Re-run Gemini Defense'}
               </button>
             </div>
 
