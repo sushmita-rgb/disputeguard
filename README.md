@@ -16,6 +16,25 @@ By ingesting multi-source transaction evidence—including carrier delivery conf
 
 ---
 
+## 🎯 Motivation & Use Cases
+
+### Why We Created This Project
+Every year, e-commerce merchants lose billions of dollars to **"friendly fraud"**—instances where cardholders purchase goods or services, successfully receive them, and then file fraudulent disputes claiming unauthorized transactions or non-delivery. 
+
+Manually defending these disputes is an operational bottleneck:
+1. **Evidence Isolation**: Gathering evidence requires manually extracting data from carrier databases, web traffic firewalls, CRM logs, and card authorization histories.
+2. **Rule Matrix Complexity**: Payment card networks constantly update representment rules. For instance, **Visa Compelling Evidence (CE) 3.0** guidelines specify that merchants must verify prior undisputed transaction histories on the same card.
+3. **Response Speed**: Chargeback operations teams spend valuable hours writing custom representment letters, often missing tight bank response deadlines.
+
+Defendr/ChargeGuard AI was created to automate the compilation, analysis, scoring, and representment generation into a seamless **2-second automated flow** powered by AI.
+
+### Key Use Cases
+- **E-Commerce Physical Delivery Verification**: Connects tracking details (e.g., FedEx, UPS Priority) to AVS/CVV authorization logs.
+- **Digital SaaS Subscription Audits**: Extracts login logs, active session audits, and electronic clickwrap agreement timestamps to verify recurring subscription validity.
+- **Enterprise Bulk Dispute Management**: High-volume ingestion of multi-case JSON payloads to automate scaling risk queues for marketplaces.
+
+---
+
 ## 📐 Architecture & RocketRide Pipeline Flow
 
 ```
